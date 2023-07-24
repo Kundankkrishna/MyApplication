@@ -46,9 +46,9 @@ jobs:
       - name: Set up SSH key
         run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
   
-      - name: Deploy to EC2 Instance
+      - name: Deploy to server
         run: |
-            ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa kk@$103.53.233.81 << 'EOF'
+            ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa kk@103.53.233.81 << 'EOF'
               docker stop myappcontainer || true
               docker rm myappcontainer || true
               docker run -d --name kundan_website -p 8081:8081 docker.io/kundankkkrishna/newapp:latest
