@@ -48,7 +48,7 @@ jobs:
   
       - name: Deploy to EC2 Instance
         run: |
-            ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.USER_NAME }}@${{ secrets.SERVER_IP }} << 'EOF'
+            ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa kk@$103.53.233.81 << 'EOF'
               docker stop myappcontainer || true
               docker rm myappcontainer || true
               docker run -d --name kundan_website -p 8081:8081 docker.io/kundankkkrishna/newapp:latest
