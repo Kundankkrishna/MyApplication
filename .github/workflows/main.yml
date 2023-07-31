@@ -6,7 +6,7 @@ on:
       
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -18,38 +18,33 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4.1.1
         with:
-          context: .
           push: true
           tags: kundankkkrishna/newapp:latest
           
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Configure SSH
-        uses: webfactory/ssh-agent@v0.5.0
+      - name: Login to Docker Repository
+        uses: docker/login-action@v1
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Log in to Docker registry
-        run: docker login docker.io -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
   
       - name: Pull Docker image
         run: docker pull docker.io/kundankkkrishna/newapp:latest
-  
-      - name: Set up SSH key
-        run: echo "${{ secrets.SHIFU_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-  
-      - name: Deploy to server
+        
+#       - name: delete previous deployments
+#         run: kubectl delete -f kube
+                
+      - name: Deploy to minikube
         run: |
-            ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.110.81.91 << 'EOF'
-              docker stop myappcontainer || true
-              docker rm myappcontainer || true
-              docker run -d --name kundan_website -p 8081:8081 docker.io/kundankkkrishna/newapp:latest
-            EOF
+          kubectl apply -f kube
+        
+      - name: Test service URLs
+        run: |
+            minikube service list
+            kubectl describe service myservice
