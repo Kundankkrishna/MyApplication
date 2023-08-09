@@ -40,6 +40,8 @@ jobs:
         
 #       - name: delete previous deployments
 #         run: kubectl delete -f kube
+      - name: check directory
+        run: pwd && ls -al $(pwd)
 
       - name: stetup minikube
         id: minikube
