@@ -42,8 +42,8 @@ jobs:
         id: minikube
         uses: medyagh/setup-minikube@latest
         
-      - name: delete previous deployments
-        run: kubectl delete -f kube
+      # - name: delete previous deployments
+      #   run: kubectl delete -f kube
 
       - name: Deploy to minikube
         run: |
