@@ -29,23 +29,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
       - name: Login to Docker Repository
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-  
-      # - name: Pull Docker image
-      #   run: docker pull docker.io/kundankkkrishna/newapp:latest
-        
-# #       - name: delete previous deployments
-# #         run: kubectl delete -f kube
-#       - name: check directory
-#         run: pwd && ls -al . && sudo find / -name kube -print && cd /usr/src/path/
-
+          
       - name: stetup minikube
         id: minikube
         uses: medyagh/setup-minikube@latest
+        
+      - name: delete previous deployments
+        run: kubectl delete -f kube
 
       - name: Deploy to minikube
         run: |
