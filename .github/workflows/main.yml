@@ -35,13 +35,13 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
   
-      - name: Pull Docker image
-        run: docker pull docker.io/kundankkkrishna/newapp:latest
+      # - name: Pull Docker image
+      #   run: docker pull docker.io/kundankkkrishna/newapp:latest
         
-#       - name: delete previous deployments
-#         run: kubectl delete -f kube
-      - name: check directory
-        run: pwd && ls -al . && sudo find / -name kube -print && cd /usr/src/path/
+# #       - name: delete previous deployments
+# #         run: kubectl delete -f kube
+#       - name: check directory
+#         run: pwd && ls -al . && sudo find / -name kube -print && cd /usr/src/path/
 
       - name: stetup minikube
         id: minikube
